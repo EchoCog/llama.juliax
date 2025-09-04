@@ -38,6 +38,19 @@ struct Function𝔽{F} <: TransformationLike
     mathematical_properties::Dict{Symbol,Any}
 end
 
+# Convenience constructors
+function Array𝕍(data::Array{T,N}) where {T,N}
+    Array𝕍(data, size(data), Dict{Symbol,Any}())
+end
+
+function Tensor𝕋(data::Array{T,N}; requires_grad=false) where {T,N}
+    Tensor𝕋(data, size(data), nothing, requires_grad)
+end
+
+function Function𝔽(func::F) where F
+    Function𝔽(func, Symbol[], Dict{Symbol,Any}())
+end
+
 # Load llama.cpp shared library
 const libllama = Ref{Ptr{Nothing}}()
 

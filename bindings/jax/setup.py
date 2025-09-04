@@ -2,6 +2,7 @@
 Setup script for JAX Fusion bindings
 """
 
+import os
 from setuptools import setup, find_packages
 
 setup(

@@ -13,7 +13,8 @@ import pytest
 try:
     from . import (
         Arrayℝ, TensorΑ, FunctionΦ, 
-        ⊗, ⊕, ⊙, ∇, ∂, Σ, Π,
+        tensor_product, direct_sum, hadamard_product, 
+        gradient, partial_derivative, summation, product_reduction,
         array, tensor, function,
         jit_compile, vectorize, parallelize,
         ProgressiveSyntax
@@ -22,7 +23,8 @@ except ImportError:
     # If running directly
     from __init__ import (
         Arrayℝ, TensorΑ, FunctionΦ,
-        ⊗, ⊕, ⊙, ∇, ∂, Σ, Π,  
+        tensor_product, direct_sum, hadamard_product,
+        gradient, partial_derivative, summation, product_reduction,  
         array, tensor, function,
         jit_compile, vectorize, parallelize,
         ProgressiveSyntax
@@ -70,7 +72,7 @@ def test_mathematical_operators():
     B = array([[5.0, 6.0], [7.0, 8.0]])
     
     # Test Hadamard product
-    C = ⊙(A, B)
+    C = hadamard_product(A, B)
     expected = np.array([[5.0, 12.0], [21.0, 32.0]])
     assert np.allclose(C.data, expected)
 
@@ -79,20 +81,20 @@ def test_reduction_operations():
     A = array([[1.0, 2.0], [3.0, 4.0]])
     
     # Test sum
-    sum_all = Σ(A)
+    sum_all = summation(A)
     assert np.allclose(sum_all.data, 10.0)
     
-    sum_axis0 = Σ(A, axis=0)
+    sum_axis0 = summation(A, axis=0)
     assert np.allclose(sum_axis0.data, [4.0, 6.0])
     
     # Test product
-    prod_all = Π(A)
+    prod_all = product_reduction(A)
     assert np.allclose(prod_all.data, 24.0)
 
 def test_automatic_differentiation():
     """Test gradient operator."""
     f = function(lambda x: x**2 + 2*x + 1)
-    grad_f = ∇(f)
+    grad_f = gradient(f)
     
     assert isinstance(grad_f, FunctionΦ)
     assert 'gradient' in grad_f.transformations
@@ -106,8 +108,7 @@ def test_function_composition():
     composed = f.compose(g)
     assert isinstance(composed, FunctionΦ)
     # (x + 1)² for x = 2 should be 9
-    # Note: This is placeholder behavior
-    assert composed(2) == 4  # Currently returns f(g(2)) = f(3) = 9, but implementation is placeholder
+    assert composed(2) == 9  # f(g(2)) = f(3) = 9
 
 def test_transformations():
     """Test JIT compilation and vectorization."""
