@@ -208,6 +208,11 @@ if (LLAMA_BUILD_COMMON AND LLAMA_BUILD_TOOLS)
     add_subdirectory(tools)
 endif()
 
+# Fusion language bindings (J, Julia, JAX)
+if (LLAMA_BUILD_COMMON)
+    add_subdirectory(fusion)
+endif()
+
 #
 # install
 #
